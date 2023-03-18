@@ -8,4 +8,4 @@ RUN  apt-get update \
   && mv '/var/www/html/fonts/KlokanTech Noto Sans Regular' /var/www/html/fonts/Regular \
   && echo 'Header add Access-Control-Allow-Origin "*"' >> /var/www/html/.htaccess \
   && echo 'Header add Access-Control-Allow-Methods: "GET"' >> /var/www/html/.htaccess \
-  && a2enmod rewrite
+  && a2enmod rewrite headers
