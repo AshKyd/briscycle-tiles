@@ -5,4 +5,4 @@ RUN  apt-get update \
   && wget http://bigdisk/briscycle/seq.mbtiles -P /var/www/html/ \
   && git clone https://github.com/klokantech/klokantech-gl-fonts /var/www/html/fonts \
   && mv '/var/www/html/fonts/fonts/KlokanTech Noto Sans Bold' /var/www/html/fonts/fonts/Bold \
-  && mv '/var/www/html/fonts/fonts/KlokanTech Noto Sans Regular' /var/www/html/fonts/fonts/Regular"
+  && mv '/var/www/html/fonts/fonts/KlokanTech Noto Sans Regular' /var/www/html/fonts/fonts/Regular
