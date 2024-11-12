@@ -1,3 +1,4 @@
 *.pbf
 *.mbtiles
 .DS_Store
+build/coastline/

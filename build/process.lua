@@ -217,9 +217,9 @@ end
 
 -- Process way tags
 
-majorRoadValues = Set { "motorway", "trunk", "primary" }
+majorRoadValues = Set { "motorway", "trunk", "primary", "cycleway" }
 z9RoadValues  = Set { "secondary", "motorway_link", "trunk_link" }
-z10RoadValues  = Set { "primary_link", "secondary_link" }
+z10RoadValues  = Set { "primary_link", "secondary_link", "path" }
 z11RoadValues   = Set { "tertiary", "tertiary_link", "busway", "bus_guideway" }
 -- On zoom 12, various road classes are merged into "minor"
 z12MinorRoadValues = Set { "unclassified", "residential", "road", "living_street" }
