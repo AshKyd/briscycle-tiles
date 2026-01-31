@@ -307,6 +307,31 @@ waterwayClasses = Set { "stream", "river", "canal", "drain", "ditch" }
 
 -- Scan relations for use in ways
 
+function SetCyclewayAttributes(highway_class)
+	-- Bike Specific Infrastructure
+	local cycleway = Find("cycleway")
+	local cycleway_left = Find("cycleway:left")
+	local cycleway_right = Find("cycleway:right")
+	local cycleway_both = Find("cycleway:both")
+	local cycleway_lane = Find("cycleway:lane")
+	local cycleway_both_lane = Find("cycleway:both:lane")
+	local cycleway_left_lane = Find("cycleway:left:lane")
+	local cycleway_right_lane = Find("cycleway:right:lane")
+
+	if is_valid(cycleway) or is_valid(cycleway_left) or is_valid(cycleway_right) or is_valid(cycleway_both) or is_valid(cycleway_lane) or is_valid(cycleway_both_lane) or is_valid(cycleway_left_lane) or is_valid(cycleway_right_lane) or highway_class == "cycleway" then
+		Attribute("cycle", "yus")
+	end
+
+	if is_valid(cycleway) then Attribute("cycleway", cycleway) end
+	if is_valid(cycleway_left) then Attribute("cycleway_left", cycleway_left) end
+	if is_valid(cycleway_right) then Attribute("cycleway_right", cycleway_right) end
+	if is_valid(cycleway_both) then Attribute("cycleway_both", cycleway_both) end
+	if is_valid(cycleway_lane) then Attribute("cycleway_lane", cycleway_lane) end
+	if is_valid(cycleway_both_lane) then Attribute("cycleway_both_lane", cycleway_both_lane) end
+	if is_valid(cycleway_left_lane) then Attribute("cycleway_left_lane", cycleway_left_lane) end
+	if is_valid(cycleway_right_lane) then Attribute("cycleway_right_lane", cycleway_right_lane) end
+end
+
 function relation_scan_function()
 	if Find("type")=="boundary" and Find("boundary")=="administrative" then
 		Accept()
@@ -357,28 +382,7 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		if Find("expressway") == "yes" then AttributeBoolean("expressway", true, 7) end
 		if Holds("mtb_scale") then Attribute("mtb_scale", Find("mtb:scale"), 10) end
 
-		-- Bike Specific Infrastructure
-		local cycleway = Find("cycleway")
-		local cycleway_left = Find("cycleway:left")
-		local cycleway_right = Find("cycleway:right")
-		local cycleway_both = Find("cycleway:both")
-		local cycleway_lane = Find("cycleway:lane")
-		local cycleway_both_lane = Find("cycleway:both:lane")
-		local cycleway_left_lane = Find("cycleway:left:lane")
-		local cycleway_right_lane = Find("cycleway:right:lane")
-
-		if is_valid(cycleway) or is_valid(cycleway_left) or is_valid(cycleway_right) or is_valid(cycleway_both) or is_valid(cycleway_lane) or is_valid(cycleway_both_lane) or is_valid(cycleway_left_lane) or is_valid(cycleway_right_lane) or highway_class == "cycleway" then
-			Attribute("cycle", "yus")
-		end
-
-		if is_valid(cycleway) then Attribute("cycleway", cycleway) end
-		if is_valid(cycleway_left) then Attribute("cycleway_left", cycleway_left) end
-		if is_valid(cycleway_right) then Attribute("cycleway_right", cycleway_right) end
-		if is_valid(cycleway_both) then Attribute("cycleway_both", cycleway_both) end
-		if is_valid(cycleway_lane) then Attribute("cycleway_lane", cycleway_lane) end
-		if is_valid(cycleway_both_lane) then Attribute("cycleway_both_lane", cycleway_both_lane) end
-		if is_valid(cycleway_left_lane) then Attribute("cycleway_left_lane", cycleway_left_lane) end
-		if is_valid(cycleway_right_lane) then Attribute("cycleway_right_lane", cycleway_right_lane) end
+		SetCyclewayAttributes(highway_class)
 
 		if Holds("smoothness") then Attribute("smoothness", Find("smoothness"), 12) end
 		if Holds("lit") then Attribute("lit", Find("lit"), 12) end
@@ -573,6 +577,7 @@ function way_function()
 				Attribute("class",h)
 				Attribute("network","road") -- **** could also be us-interstate, us-highway, us-state
 				if subclass then Attribute("subclass", highway) end
+				SetCyclewayAttributes(h)
 				local ref = Find("ref")
 				if ref~="" then
 					Attribute("ref",ref)
