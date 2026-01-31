@@ -58,7 +58,7 @@ unpavedValues = Set { "unpaved", "compacted", "dirt", "earth", "fine_gravel", "g
 -- Process node tags
 
 node_keys = { "addr:housenumber","aerialway","aeroway","amenity","barrier","highway","historic","leisure","natural","office","place","railway","shop","sport","tourism","waterway" }
-way_keys = { "highway", "railway", "waterway", "landuse", "leisure", "amenity", "building", "natural", "tourism", "military", "aeroway", "aerialway", "boundary", "man_made", "public_transport", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both", "cycleway:lane", "cycleway:both:lane", "cycleway:left:lane", "cycleway:right:lane", "oneway", "surface", "access", "bicycle", "foot", "horse", "toll", "expressway", "mtb:scale", "smoothness", "lit", "incline", "name", "name:en", "ref", "service", "layer", "bridge", "tunnel" }
+way_keys = { "highway", "railway", "waterway", "landuse", "leisure", "amenity", "building", "natural", "tourism", "military", "aeroway", "aerialway", "boundary", "man_made", "public_transport", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both", "cycleway:lane", "cycleway:both:lane", "cycleway:left:lane", "cycleway:right:lane", "oneway", "surface", "access", "bicycle", "foot", "horse", "toll", "expressway", "mtb:scale", "smoothness", "lit", "incline", "name", "name:en", "ref", "service", "layer", "bridge", "tunnel", "abandoned:railway" }
 
 -- Get admin level which the place node is capital of.
 -- Returns nil in case of invalid capital and for places which are not capitals.
@@ -317,8 +317,9 @@ function SetCyclewayAttributes(highway_class)
 	local cycleway_both_lane = Find("cycleway:both:lane")
 	local cycleway_left_lane = Find("cycleway:left:lane")
 	local cycleway_right_lane = Find("cycleway:right:lane")
+	local bicycle = Find("bicycle")
 
-	if is_valid(cycleway) or is_valid(cycleway_left) or is_valid(cycleway_right) or is_valid(cycleway_both) or is_valid(cycleway_lane) or is_valid(cycleway_both_lane) or is_valid(cycleway_left_lane) or is_valid(cycleway_right_lane) or highway_class == "cycleway" then
+	if is_valid(bicycle) or is_valid(cycleway) or is_valid(cycleway_left) or is_valid(cycleway_right) or is_valid(cycleway_both) or is_valid(cycleway_lane) or is_valid(cycleway_both_lane) or is_valid(cycleway_left_lane) or is_valid(cycleway_right_lane) or highway_class == "cycleway" then
 		Attribute("cycle", "yus")
 	end
 
@@ -525,6 +526,13 @@ function way_function()
 			minzoom = 14
 			subclass = h
 			h = "path"
+			-- Boost zoom for designated bike paths, especially rail trails
+			if Find("bicycle") == "designated" then
+				minzoom = 12
+				if Find("railway") == "abandoned" or Find("abandoned:railway") ~= "" or Find("name") ~= "" then
+					minzoom = 10
+				end
+			end
 		end
 
 		-- Links (ramp)
