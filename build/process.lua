@@ -53,6 +53,7 @@ unpavedValues = Set { "unpaved", "compacted", "dirt", "earth", "fine_gravel", "g
 -- Process node tags
 
 node_keys = { "addr:housenumber","aerialway","aeroway","amenity","barrier","highway","historic","leisure","natural","office","place","railway","shop","sport","tourism","waterway" }
+way_keys = { "highway", "railway", "waterway", "landuse", "leisure", "amenity", "building", "natural", "tourism", "military", "aeroway", "aerialway", "boundary", "man_made", "public_transport", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both", "cycleway:both:lane", "cycleway:left:lane", "cycleway:right:lane", "oneway", "surface", "access", "bicycle", "foot", "horse", "toll", "expressway", "mtb:scale", "smoothness", "lit", "incline", "name", "name:en", "ref", "service", "layer", "bridge", "tunnel" }
 
 -- Get admin level which the place node is capital of.
 -- Returns nil in case of invalid capital and for places which are not capitals.
@@ -314,6 +315,7 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 	if subclass and subclass ~= "" then
 		Attribute("subclass", subclass)
 	end
+	local accessMinzoom = 9
 	AttributeNumeric("layer", tonumber(Find("layer")) or 0, accessMinzoom)
 	SetBrunnelAttributes()
 	-- We do not write any other attributes for areas.
@@ -327,7 +329,6 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 	-- Service
 	if (is_rail or highway_class == "service") and (service and service ~="") then Attribute("service", service) end
 
-	local accessMinzoom = 9
 	if is_road then
 		local oneway = Find("oneway")
 		if oneway == "yes" or oneway == "1" then
@@ -352,9 +353,23 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		if Holds("mtb_scale") then Attribute("mtb_scale", Find("mtb:scale"), 10) end
 
 		-- Bike Specific Infrastructure
-		if Holds("cycleway") then Attribute("cycleway", Find("cycleway"), accessMinzoom) end
-		if Holds("cycleway:left") then Attribute("cycleway_left", Find("cycleway:left"), accessMinzoom) end
-		if Holds("cycleway:right") then Attribute("cycleway_right", Find("cycleway:right"), accessMinzoom) end
+		local cycleway = Find("cycleway")
+		local cycleway_left = Find("cycleway:left")
+		local cycleway_right = Find("cycleway:right")
+		local cycleway_both = Find("cycleway:both")
+		local cycleway_lane = Find("cycleway:lane")
+		local cycleway_both_lane = Find("cycleway:both:lane")
+
+		if cycleway ~= "" or cycleway_left ~= "" or cycleway_right ~= "" or cycleway_both ~= "" or cycleway_lane ~= "" or cycleway_both_lane ~= "" or highway_class == "cycleway" then
+			Attribute("cycle", "yus", accessMinzoom)
+		end
+
+		if cycleway ~= "" then Attribute("cycleway", cycleway, accessMinzoom) end
+		if cycleway_left ~= "" then Attribute("cycleway_left", cycleway_left, accessMinzoom) end
+		if cycleway_right ~= "" then Attribute("cycleway_right", cycleway_right, accessMinzoom) end
+		if cycleway_both ~= "" then Attribute("cycleway_both", cycleway_both, accessMinzoom) end
+		if cycleway_both_lane ~= "" then Attribute("cycleway_both_lane", cycleway_both_lane, accessMinzoom) end
+
 		if Holds("smoothness") then Attribute("smoothness", Find("smoothness"), 12) end
 		if Holds("lit") then Attribute("lit", Find("lit"), 12) end
 		if Holds("incline") then Attribute("incline", Find("incline"), 12) end
