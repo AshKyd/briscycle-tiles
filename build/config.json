@@ -113,7 +113,7 @@
     "basezoom": 14,
     "include_ids": false,
     "combine_below": 14,
-    "name": "Tilemaker to OpenMapTiles schema",
+    "name": "Briscylcle.com tiles",
     "version": "3.0",
     "description": "Tile config based on OpenMapTiles schema",
     "compress": "none",
@@ -122,7 +122,7 @@
       "scheme": "xyz",
       "type": "baselayer",
       "format": "pbf",
-      "tiles": ["https://example.com/liechtenstein/{z}/{x}/{y}.pbf"]
+      "tiles": ["https://tiles-bc-test.kyd.au/seqtiles/{z}/{x}/{y}.pbf"]
     }
   }
 }
