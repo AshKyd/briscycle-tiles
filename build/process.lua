@@ -246,7 +246,7 @@ landcoverKeys   = { wood="wood", forest="wood",
 
 -- POI key/value pairs: based on https://github.com/openmaptiles/openmaptiles/blob/master/layers/poi/mapping.yaml
 poiTags         = { aerialway = Set { "station" },
-					amenity = Set { "arts_centre", "bank", "bar", "bbq", "bicycle_parking", "bicycle_rental", "biergarten", "bus_station", "cafe", "cinema", "clinic", "college", "community_centre", "courthouse", "dentist", "doctors", "embassy", "fast_food", "ferry_terminal", "fire_station", "food_court", "fuel", "grave_yard", "hospital", "ice_cream", "kindergarten", "library", "marketplace", "motorcycle_parking", "nightclub", "nursing_home", "parking", "pharmacy", "place_of_worship", "police", "post_box", "post_office", "prison", "pub", "public_building", "recycling", "restaurant", "school", "shelter", "swimming_pool", "taxi", "telephone", "theatre", "toilets", "townhall", "university", "veterinary", "waste_basket" },
+					amenity = Set { "arts_centre", "bank", "bar", "bbq", "bicycle_parking", "bicycle_rental", "bicycle_repair_station", "biergarten", "bus_station", "cafe", "cinema", "clinic", "college", "community_centre", "courthouse", "dentist", "doctors", "embassy", "fast_food", "ferry_terminal", "fire_station", "food_court", "fuel", "grave_yard", "hospital", "ice_cream", "kindergarten", "library", "marketplace", "motorcycle_parking", "nightclub", "nursing_home", "parking", "pharmacy", "place_of_worship", "police", "post_box", "post_office", "prison", "pub", "public_building", "recycling", "restaurant", "school", "shelter", "swimming_pool", "taxi", "telephone", "theatre", "toilets", "townhall", "university", "veterinary", "waste_basket" },
 					barrier = Set { "bollard", "border_control", "cycle_barrier", "gate", "lift_gate", "sally_port", "stile", "toll_booth" },
 					building = Set { "dormitory" },
 					highway = Set { "bus_stop" },
@@ -350,6 +350,14 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		AttributeBoolean("toll", Find("toll") == "yes", accessMinzoom)
 		if Find("expressway") == "yes" then AttributeBoolean("expressway", true, 7) end
 		if Holds("mtb_scale") then Attribute("mtb_scale", Find("mtb:scale"), 10) end
+
+		-- Bike Specific Infrastructure
+		if Holds("cycleway") then Attribute("cycleway", Find("cycleway"), accessMinzoom) end
+		if Holds("cycleway:left") then Attribute("cycleway_left", Find("cycleway:left"), accessMinzoom) end
+		if Holds("cycleway:right") then Attribute("cycleway_right", Find("cycleway:right"), accessMinzoom) end
+		if Holds("smoothness") then Attribute("smoothness", Find("smoothness"), 12) end
+		if Holds("lit") then Attribute("lit", Find("lit"), 12) end
+		if Holds("incline") then Attribute("incline", Find("incline"), 12) end
 	end
 end
 
@@ -756,6 +764,12 @@ function WritePOI(class,subclass,rank)
 	Attribute("subclass", subclass)
 	-- layer defaults to 0
 	AttributeNumeric("layer", tonumber(Find("layer")) or 0)
+	-- Bike Specific POIs
+	if class == "bicycle_parking" then Attribute("bicycle_parking", Find("bicycle_parking")) end
+	if class == "bicycle_repair_station" then Attribute("service:bicycle:pump", Find("service:bicycle:pump")) end
+	if subclass == "bicycle" then
+		if Holds("service:bicycle:repair") then Attribute("repair", Find("service:bicycle:repair")) end
+	end
 	-- indoor defaults to false
 	AttributeBoolean("indoor", (Find("indoor") == "yes"))
 	-- level has no default

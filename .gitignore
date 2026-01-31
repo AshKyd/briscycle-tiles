@@ -2,3 +2,4 @@
 *.mbtiles
 .DS_Store
 build/coastline/
+build/seqtiles/
