@@ -528,7 +528,7 @@ function way_function()
 			h = "path"
 			-- Boost zoom for designated bike paths, especially rail trails
 			if Find("bicycle") == "designated" then
-				minzoom = 4
+				minzoom = 8
 			end
 		end
 
