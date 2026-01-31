@@ -321,7 +321,7 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		Attribute("subclass", subclass)
 	end
 	local accessMinzoom = 9
-	AttributeNumeric("layer", tonumber(Find("layer")) or 0, accessMinzoom)
+	AttributeNumeric("layer", tonumber(Find("layer")) or 0)
 	SetBrunnelAttributes()
 	-- We do not write any other attributes for areas.
 	if is_area then
@@ -349,11 +349,11 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		elseif unpavedValues[surface] then
 			Attribute("surface", "unpaved", surfaceMinzoom)
 		end
-		if Holds("access") then Attribute("access", Find("access"), accessMinzoom) end
-		if Holds("bicycle") then Attribute("bicycle", Find("bicycle"), accessMinzoom) end
-		if Holds("foot") then Attribute("foot", Find("foot"), accessMinzoom) end
-		if Holds("horse") then Attribute("horse", Find("horse"), accessMinzoom) end
-		AttributeBoolean("toll", Find("toll") == "yes", accessMinzoom)
+		if Holds("access") then Attribute("access", Find("access")) end
+		if Holds("bicycle") then Attribute("bicycle", Find("bicycle")) end
+		if Holds("foot") then Attribute("foot", Find("foot")) end
+		if Holds("horse") then Attribute("horse", Find("horse")) end
+		AttributeBoolean("toll", Find("toll") == "yes")
 		if Find("expressway") == "yes" then AttributeBoolean("expressway", true, 7) end
 		if Holds("mtb_scale") then Attribute("mtb_scale", Find("mtb:scale"), 10) end
 
@@ -368,17 +368,17 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		local cycleway_right_lane = Find("cycleway:right:lane")
 
 		if is_valid(cycleway) or is_valid(cycleway_left) or is_valid(cycleway_right) or is_valid(cycleway_both) or is_valid(cycleway_lane) or is_valid(cycleway_both_lane) or is_valid(cycleway_left_lane) or is_valid(cycleway_right_lane) or highway_class == "cycleway" then
-			Attribute("cycle", "yus", accessMinzoom)
+			Attribute("cycle", "yus")
 		end
 
-		if is_valid(cycleway) then Attribute("cycleway", cycleway, accessMinzoom) end
-		if is_valid(cycleway_left) then Attribute("cycleway_left", cycleway_left, accessMinzoom) end
-		if is_valid(cycleway_right) then Attribute("cycleway_right", cycleway_right, accessMinzoom) end
-		if is_valid(cycleway_both) then Attribute("cycleway_both", cycleway_both, accessMinzoom) end
-		if is_valid(cycleway_lane) then Attribute("cycleway_lane", cycleway_lane, accessMinzoom) end
-		if is_valid(cycleway_both_lane) then Attribute("cycleway_both_lane", cycleway_both_lane, accessMinzoom) end
-		if is_valid(cycleway_left_lane) then Attribute("cycleway_left_lane", cycleway_left_lane, accessMinzoom) end
-		if is_valid(cycleway_right_lane) then Attribute("cycleway_right_lane", cycleway_right_lane, accessMinzoom) end
+		if is_valid(cycleway) then Attribute("cycleway", cycleway) end
+		if is_valid(cycleway_left) then Attribute("cycleway_left", cycleway_left) end
+		if is_valid(cycleway_right) then Attribute("cycleway_right", cycleway_right) end
+		if is_valid(cycleway_both) then Attribute("cycleway_both", cycleway_both) end
+		if is_valid(cycleway_lane) then Attribute("cycleway_lane", cycleway_lane) end
+		if is_valid(cycleway_both_lane) then Attribute("cycleway_both_lane", cycleway_both_lane) end
+		if is_valid(cycleway_left_lane) then Attribute("cycleway_left_lane", cycleway_left_lane) end
+		if is_valid(cycleway_right_lane) then Attribute("cycleway_right_lane", cycleway_right_lane) end
 
 		if Holds("smoothness") then Attribute("smoothness", Find("smoothness"), 12) end
 		if Holds("lit") then Attribute("lit", Find("lit"), 12) end
