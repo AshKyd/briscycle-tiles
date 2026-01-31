@@ -29,6 +29,11 @@ function Set(list)
 	return set
 end
 
+-- Check if a value is valid (not empty, no, or none)
+function is_valid(val)
+	return val ~= "" and val ~= "no" and val ~= "none"
+end
+
 -- Meters per pixel if tile is 256x256
 ZRES5  = 4891.97
 ZRES6  = 2445.98
@@ -53,7 +58,7 @@ unpavedValues = Set { "unpaved", "compacted", "dirt", "earth", "fine_gravel", "g
 -- Process node tags
 
 node_keys = { "addr:housenumber","aerialway","aeroway","amenity","barrier","highway","historic","leisure","natural","office","place","railway","shop","sport","tourism","waterway" }
-way_keys = { "highway", "railway", "waterway", "landuse", "leisure", "amenity", "building", "natural", "tourism", "military", "aeroway", "aerialway", "boundary", "man_made", "public_transport", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both", "cycleway:both:lane", "cycleway:left:lane", "cycleway:right:lane", "oneway", "surface", "access", "bicycle", "foot", "horse", "toll", "expressway", "mtb:scale", "smoothness", "lit", "incline", "name", "name:en", "ref", "service", "layer", "bridge", "tunnel" }
+way_keys = { "highway", "railway", "waterway", "landuse", "leisure", "amenity", "building", "natural", "tourism", "military", "aeroway", "aerialway", "boundary", "man_made", "public_transport", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both", "cycleway:lane", "cycleway:both:lane", "cycleway:left:lane", "cycleway:right:lane", "oneway", "surface", "access", "bicycle", "foot", "horse", "toll", "expressway", "mtb:scale", "smoothness", "lit", "incline", "name", "name:en", "ref", "service", "layer", "bridge", "tunnel" }
 
 -- Get admin level which the place node is capital of.
 -- Returns nil in case of invalid capital and for places which are not capitals.
@@ -359,16 +364,21 @@ function write_to_transportation_layer(minzoom, highway_class, subclass, ramp, s
 		local cycleway_both = Find("cycleway:both")
 		local cycleway_lane = Find("cycleway:lane")
 		local cycleway_both_lane = Find("cycleway:both:lane")
+		local cycleway_left_lane = Find("cycleway:left:lane")
+		local cycleway_right_lane = Find("cycleway:right:lane")
 
-		if cycleway ~= "" or cycleway_left ~= "" or cycleway_right ~= "" or cycleway_both ~= "" or cycleway_lane ~= "" or cycleway_both_lane ~= "" or highway_class == "cycleway" then
+		if is_valid(cycleway) or is_valid(cycleway_left) or is_valid(cycleway_right) or is_valid(cycleway_both) or is_valid(cycleway_lane) or is_valid(cycleway_both_lane) or is_valid(cycleway_left_lane) or is_valid(cycleway_right_lane) or highway_class == "cycleway" then
 			Attribute("cycle", "yus", accessMinzoom)
 		end
 
-		if cycleway ~= "" then Attribute("cycleway", cycleway, accessMinzoom) end
-		if cycleway_left ~= "" then Attribute("cycleway_left", cycleway_left, accessMinzoom) end
-		if cycleway_right ~= "" then Attribute("cycleway_right", cycleway_right, accessMinzoom) end
-		if cycleway_both ~= "" then Attribute("cycleway_both", cycleway_both, accessMinzoom) end
-		if cycleway_both_lane ~= "" then Attribute("cycleway_both_lane", cycleway_both_lane, accessMinzoom) end
+		if is_valid(cycleway) then Attribute("cycleway", cycleway, accessMinzoom) end
+		if is_valid(cycleway_left) then Attribute("cycleway_left", cycleway_left, accessMinzoom) end
+		if is_valid(cycleway_right) then Attribute("cycleway_right", cycleway_right, accessMinzoom) end
+		if is_valid(cycleway_both) then Attribute("cycleway_both", cycleway_both, accessMinzoom) end
+		if is_valid(cycleway_lane) then Attribute("cycleway_lane", cycleway_lane, accessMinzoom) end
+		if is_valid(cycleway_both_lane) then Attribute("cycleway_both_lane", cycleway_both_lane, accessMinzoom) end
+		if is_valid(cycleway_left_lane) then Attribute("cycleway_left_lane", cycleway_left_lane, accessMinzoom) end
+		if is_valid(cycleway_right_lane) then Attribute("cycleway_right_lane", cycleway_right_lane, accessMinzoom) end
 
 		if Holds("smoothness") then Attribute("smoothness", Find("smoothness"), 12) end
 		if Holds("lit") then Attribute("lit", Find("lit"), 12) end
