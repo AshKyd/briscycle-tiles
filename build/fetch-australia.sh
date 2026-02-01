@@ -1,0 +1,1 @@
+wget https://download.geofabrik.de/australia-oceania/australia-latest.osm.pbf

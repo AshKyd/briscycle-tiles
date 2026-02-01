@@ -122,7 +122,7 @@
       "scheme": "xyz",
       "type": "baselayer",
       "format": "pbf",
-      "tiles": ["https://tiles-bc-test.kyd.au/seqtiles/{z}/{x}/{y}.pbf"]
+      "tiles": ["https://tiles.briscycle.com/seqtiles/{z}/{x}/{y}.pbf"]
     }
   }
 }
