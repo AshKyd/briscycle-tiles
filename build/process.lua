@@ -127,6 +127,9 @@ end
 
 
 function node_function()
+	-- Filter private swimming pools
+	if (Find("leisure") == "swimming_pool" or Find("amenity") == "swimming_pool") and Find("access") == "private" then return end
+
 	-- Write 'aerodrome_label'
 	local aeroway = Find("aeroway")
 	if aeroway == "aerodrome" then
@@ -423,6 +426,7 @@ function way_function()
 
 	-- Miscellaneous preprocessing
 	if Find("disused") == "yes" then return end
+	if (leisure == "swimming_pool" or amenity == "swimming_pool" or building == "swimming_pool") and Find("access") == "private" then return end
 	if boundary~="" and Find("protection_title")=="National Forest" and Find("operator")=="United States Forest Service" then return end
 	if highway == "proposed" then return end
 	if aerowayBuildings[aeroway] then building="yes"; aeroway="" end
@@ -895,6 +899,7 @@ function GetPOIRank()
 	for k,list in pairs(poiTags) do
 		if list[Find(k)] then
 			v = Find(k)	-- k/v are the OSM tag pair
+			if v == "swimming_pool" and Find("access") == "private" then return nil, nil, nil end
 			class = poiClasses[v] or k
 			rank  = poiClassRanks[class] or 25
 			subclassKey = poiSubClasses[v]
