@@ -3,7 +3,7 @@
 # Bounding box: 151.853,-28.48,154.366,-26.249
 
 osmosis \
-  --read-pbf file="australia-latest.pbf" \
+  --read-pbf file="australia-latest.osm.pbf" \
   --bounding-box \
     top=-26.249 \
     left=151.853 \
