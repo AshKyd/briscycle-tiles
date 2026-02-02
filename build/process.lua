@@ -803,12 +803,47 @@ function WritePOI(class,subclass,rank)
 	Attribute("subclass", subclass)
 	-- layer defaults to 0
 	AttributeNumeric("layer", tonumber(Find("layer")) or 0)
-	-- Bike Specific POIs
-	if class == "bicycle_parking" then Attribute("bicycle_parking", Find("bicycle_parking")) end
-	if class == "bicycle_repair_station" then Attribute("service:bicycle:pump", Find("service:bicycle:pump")) end
-	if subclass == "bicycle" then
-		if Holds("service:bicycle:repair") then Attribute("repair", Find("service:bicycle:repair")) end
+
+	-- Bike Specific POIs & Shops
+	if class == "bicycle_parking" or class == "bicycle_repair_station" or subclass == "bicycle" or class == "shop" then
+		-- Address
+		Attribute("addr_housenumber", Find("addr:housenumber"))
+		Attribute("addr_street", Find("addr:street"))
+		Attribute("addr_suburb", Find("addr:suburb"))
+		Attribute("addr_city", Find("addr:city"))
+		Attribute("addr_postcode", Find("addr:postcode"))
+		Attribute("addr_state", Find("addr:state"))
+		
+		-- Contact
+		Attribute("phone", Find("phone"))
+		Attribute("website", Find("website"))
+		Attribute("email", Find("email"))
+		
+		-- Details
+		Attribute("opening_hours", Find("opening_hours"))
+		Attribute("brand", Find("brand"))
+		Attribute("operator", Find("operator"))
+		Attribute("description", Find("description"))
+
+		-- Source
+		Attribute("source", Find("source"))
+		Attribute("source_date", Find("source:date"))
 	end
+
+	-- Bike Services
+	if class == "bicycle_parking" then Attribute("bicycle_parking", Find("bicycle_parking")) end
+	if class == "bicycle_repair_station" then Attribute("service_bicycle_pump", Find("service:bicycle:pump")) end
+	if subclass == "bicycle" or class == "bicycle_repair_station" or class == "shop" then
+		Attribute("service_bicycle_retail", Find("service:bicycle:retail"))
+		Attribute("service_bicycle_rental", Find("service:bicycle:rental"))
+		Attribute("service_bicycle_repair", Find("service:bicycle:repair"))
+		Attribute("service_bicycle_pump", Find("service:bicycle:pump"))
+		Attribute("service_bicycle_diy", Find("service:bicycle:diy"))
+		Attribute("service_bicycle_cleaning", Find("service:bicycle:cleaning"))
+		Attribute("service_bicycle_second_hand", Find("service:bicycle:second_hand"))
+		Attribute("service_bicycle_parts", Find("service:bicycle:parts"))
+	end
+
 	-- indoor defaults to false
 	AttributeBoolean("indoor", (Find("indoor") == "yes"))
 	-- level has no default
